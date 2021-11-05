@@ -1,0 +1,39 @@
+.sidebar{
+    height:100%;
+    width:160px;
+    box-shadow:1px 1px 2px 2px black;
+    position:fixed;
+    top:0;
+    left:0;
+    background: #1c7430;
+    color:black;
+}
+.dropdown-div{
+    display:none;
+}
+.card{
+    width:20%;
+    margin:auto;
+    margin-top:20px;
+    background: #1c7430;
+    color:black;
+}
+.card input{
+    background: #2d3748;
+    color:black;
+    border:none;
+}
+.create-new-group .card input::placeholder{
+    background: #2d3748;
+    color:#1c7430;
+}
+.ds-ib{
+    display: inline-block;
+    width:49%;
+}
+.close-window{
+    text-align: right;
+}
+.close{
+    color:firebrick;
+}
