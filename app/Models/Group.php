@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
 
 class Group extends Model
 {
@@ -11,6 +12,14 @@ class Group extends Model
 
     protected $fillable =[
         'name',
-        'creator_id'
+        'creator_id',
+        'role'
     ];
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+    public function permissions(){
+        return $this->belongsToMany(Permission::class);
+    }
 }

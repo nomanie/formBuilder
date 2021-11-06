@@ -19,14 +19,16 @@
     <div class="card" id="showOne-new-group">
         <div class="card-header">
             <div class="ds-ib">
-                Members : {{$group[0]['name']}}
+                Members :
             </div>
             <div class="close-window ds-ib">
                 <span class="close">X</span>
             </div>
         </div>
         <div class="card-body">
-
+            @foreach($members as $member)
+                {{$member}}
+            @endforeach
         </div>
     </div>
 
