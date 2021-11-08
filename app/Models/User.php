@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use PHPUnit\TextUI\XmlConfiguration\Group;
 
 class User extends Authenticatable
 {
@@ -44,6 +43,12 @@ class User extends Authenticatable
     ];
     public function groups()
     {
-        return $this->hasMany(Group::class);
+        return $this->belongsToMany(Group::class,'group_user');
+    }
+    public function roles(){
+        return $this->belongsToMany(Role::class,'role_group_user');
+    }
+    public function invites(){
+        return $this->belongsToMany(Group::class,'invitations');
     }
 }

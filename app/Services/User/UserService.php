@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\User;
 
+use App\Models\Group;
 use App\Models\User;
 use Illuminate\Support\Arr;
 
@@ -20,5 +21,8 @@ class UserService{
       $this->user->email_verified_at = Arr::get($data,'email_verified_at');
       $this->user->save();
       return $this->user;
+    }
+    public function getInvitations(User $user){
+        return $this->user->invites();
     }
 }

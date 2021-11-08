@@ -20,4 +20,22 @@ class GroupService
         $this->group->save();
         return $this->group;
     }
+    public function syncUser(User $user, Group $group=null){
+        $group = $group?$group:$this->group;
+        $group->users()->attach($user);
+    }
+    public function inviteUser(Group $group, User $user){
+         $group->invites()->sync($user,$group);
+    }
+    public function deleteUser(Group $group, User $user){
+        $group->users()->detach($user);
+    }
+    public function deleteGroup(Group $group){
+        $group->delete();
+    }
+    public function changeGroupName(Group $group,$name){
+        $group->name = $name;
+        $group->save();
+    }
+
 }

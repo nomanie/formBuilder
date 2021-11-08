@@ -13,13 +13,15 @@ class Group extends Model
     protected $fillable =[
         'name',
         'creator_id',
-        'role'
     ];
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class,'role_group_user')->withPivot('role_id','user_id','group_id');
     }
-    public function permissions(){
-        return $this->belongsToMany(Permission::class);
+    public function roles(){
+        return $this->belongsToMany(Role::class,'role_group_user')->withPivot('role_id','user_id','group_id');
+    }
+    public function invites(){
+        return $this->belongsToMany(User::class,'invitations');
     }
 }

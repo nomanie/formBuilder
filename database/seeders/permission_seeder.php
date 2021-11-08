@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Group;
-use App\Models\Permission;
-use App\Services\Permission\PermissionService;
+use App\Models\Role;
+use App\Services\Role\RoleService;
 use Illuminate\Database\Seeder;
 
 class permission_seeder extends Seeder
@@ -14,7 +14,7 @@ class permission_seeder extends Seeder
      *
      * @return void
      */
-    public function run(PermissionService $permissionService)
+    public function run(RoleService $permissionService)
     {
         $permission = $permissionService->assignData([
             'name'=>'Aktualizacja Uzytkownika',

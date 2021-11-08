@@ -1,0 +1,8 @@
+interakcje usera:
+    tworzenie grupy
+    usuwanie grupy
+    edycja nazwy grupy
+    dodawanie userow do grupy
+    usuwanie userow z grupy
+    nadawanie roli userom w grupie!
+
