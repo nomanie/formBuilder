@@ -22,12 +22,16 @@ class RoleService
         $this->role->save();
         return $this->role;
     }
-    public function syncGroup(Group $group, Role $role=null, User $user){
+    public function syncGroup(Group $group, Role $role, User $user){
         //$permission = $permission?$permission:$this->permission;
-        $role->groups()->attach($group,['user_id'=>$user->id]);
+        $role->groups()->attach($group,['user_id'=>$user->id,'role_id'=>$role->id]);
         return $role;
     }
     public function changeUserRole(Group $group, Role $role, User $user){
-        $role->groups()->attach($group,['user_id'=>$user->id]);
+        //$role->users()->detach(['group_id'=>$group->id,'user_id'=>$user->id]);
+        //$group->roles()->detach(['user_id'=>$user,'group_id'=>$group->id]);
+        //return $role->groups()->detach($group,['user_id'=>$user->id]);
+        //
+        return $role->groups()->attach($group,['user_id'=>$user->id,'role_id'=>$role->id]);
     }
 }

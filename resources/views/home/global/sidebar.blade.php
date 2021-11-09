@@ -18,7 +18,8 @@
     </div>
     <h3 class="mt-3 dropdown-h3  text-center" id="inv">Invitations</h3>
     <div class="inv-dropdown-menu dropdown-div ml-4">
-        <s>Your Invitations</s><br>
+
+        <a href="{{route('show.sended.invite',['id'=>Auth::user()->id])}}">Your Invitations</a>
         <a href="{{route('show.invite',['id'=>Auth::user()->id])}}">Pending Invitations</a>
 
     </div>

@@ -30,15 +30,18 @@
         <div class="card-body">
             <div class="section">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         Name:
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         Role:
                     </div>
                     @if($group[0]->creator_id == Auth::user()->id)
-                    <div class="col-sm-4">
-                        Action
+                    <div class="col-sm-3">
+                        Delete:
+                    </div>
+                    <div class="col-sm-3">
+                        Owner:
                     </div>
                     @endif
                 </div>
@@ -46,29 +49,45 @@
                         @foreach($group as $user)
                     @for($i=0;$i<$user->users->count();$i++)
                     <div class="row mt-2">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             {{$user->users[$i]->name}}
 
                         </div>
-                        <div class="col-sm-4">
-                            @if($group[0]->creator_id == Auth::user()->id)
-                                {!! Form::open(['class'=>'role'.$user->users[$i]->id]) !!}
-                                @csrf
-                                {!! Form::hidden('user_id',$user->users[$i]->id,array('id'=>'user_id')) !!}
-                                {!! Form::select('role',App\Models\Role::pluck('name'),$user->users[$i]->pivot->role_id,  array('class'=>'form-control role','id'=>'role'.$user->users[$i]->id)) !!}
-                                {!! Form::close() !!}
-                            @else
-                                {!! Form::select('role',App\Models\Role::pluck('name'),$user->users[$i]->pivot->role_id,  array('class'=>'form-control',"disabled"=>'disabled')) !!}
-                            @endif
-                        </div>
-                        <div class="col-sm-4">
-                            @if($group[0]->creator_id == Auth::user()->id)
+                        <div class="col-sm-3">
+                                @foreach($user->roles as $role)
+                                @if($group[0]->creator_id == Auth::user()->id)
+                                    {!! Form::open(['method'=>'POST','url'=>route('change.user.role',['user_id'=>$user->users[$i]->id,'group_id'=>$group[0]->id])]) !!}
+                                    @if($role->pivot->user_id == $group[0]->creator_id)
+                                        @if($role->pivot->user_id == $user->users[$i]->id)
+                                            {!! Form::select('role',App\Models\Role::pluck('name'),$role->id,  array('class'=>'form-control role btn btn-warning','disabled'=>'disabled')) !!}
+                                        @endif
+                                    @else
+                                        @if($role->pivot->user_id == $user->users[$i]->id)
+                                            {!! Form::select('role',App\Models\Role::pluck('name'),$role->id,  array('class'=>'form-control role','id'=>'role'.$user->users[$i]->id)) !!}
+                                        @endif
+                                    @endif
+                                    {!! Form::close() !!}
+                                @else
+                                    @if($role->pivot->user_id == $user->users[$i]->id)
+                                        {!! Form::select('role',App\Models\Role::pluck('name'),$role->id,  array('class'=>'form-control role','id'=>'role'.$user->users[$i]->id,'disabled'=>'disabled')) !!}
+                                    @endif
+                                @endif
+                                @endforeach
 
+                        </div>
+                        @if($group[0]->creator_id == Auth::user()->id and $user->users[$i]->id != Auth::user()->id)
+                        <div class="col-sm-3">
                                 {!! Form::open(['method'=>'post','url'=>route('delete.user',['group_id'=>$group[0]->id,'id'=>$user->users[$i]->id])]) !!}
                             <button class="btn btn-danger">Usuń</button>
                                 {!! Form::close() !!}
-                            @endif
                         </div>
+                            <div class="col-sm-3">
+                                {!! Form::open(['method'=>'post','url'=>route('change.group.owner',['group_id'=>$group[0]->id])]) !!}
+                                {!! Form::hidden('user_id',$user->users[$i]->id) !!}
+                                <button class="btn btn-success">Change</button>
+                                {!! Form::close() !!}
+                            </div>
+                        @endif
                     </div>
                     @endfor
                     @endforeach
@@ -87,7 +106,7 @@
             </div>
         </div>
         <div class="card-body">
-            {!! Form::open(['method'=>'POST','url'=>route('send.invite')]) !!}
+            {!! Form::open(['method'=>'POST','url'=>route('send.invite',['id'=>Auth::user()->id])]) !!}
             {!! Form::hidden('group_id',$group[0]->id) !!}
             {!! Form::text('email',null,array('class'=>'form-control','placeholder'=>'E-mail')) !!}
             <button type="submit" class="btn btn-dark mt-2">Invite</button>
@@ -99,6 +118,13 @@
             <button class="btn btn-warning text-center">Delete Group</button>
             {!! Form::close() !!}
         </div>
+        @endif
+    @if($group[0]->creator_id != Auth::user()->id)
+    <div class="text-center leave-group">
+        {!! Form::open(['method'=>'delete','url'=>route('group.leave',['id'=>Auth::user()->id,'group_id'=>$group[0]->id])]) !!}
+        <button class="btn btn-danger text-center">Leave Group</button>
+        {!! Form::close() !!}
+    </div>
         @endif
 
 </section>
@@ -114,22 +140,16 @@
 $(function(){
     //ajax
     $(".role").on('change',function(){
-        a = $(this).attr('id');
-        data = $(".",a).val()
-        console.log(data)
-        $.ajax({
-            type: "POST",
-            url: "{{route('change.user.role',['group_id'=>$group[0]->id])}}",
-            data: $(".",$(this).attr('id')).serialize(),
-            success:function(){
-                window.location.reload()
-            }
-        })
+        $(this).parents('form:first').submit();
+            console.log($(this).parents('form:first').serialize())
     })
 })
 
 </script>
 <style>
+    #show-members-new-group{
+        width:35%;
+    }
     #invite-users{
         position:absolute;
         left:70%;
@@ -140,12 +160,20 @@ $(function(){
         left:15%;
         top:5%;
     }
+    .leave-group{
+        position:absolute;
+        left:15%;
+        top:15%;
+    }
     @media only screen and (max-width: 1200px) {
         #invite-users{
             position:static;
         }
         .delete-group{
             position:static;
+        }
+        .leave-group{
+            position: static;
         }
     }
 </style>

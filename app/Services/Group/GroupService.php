@@ -3,6 +3,7 @@
 namespace App\Services\Group;
 
 use App\Models\Group;
+use App\Models\Role;
 use App\Models\User;
 
 class GroupService
@@ -25,7 +26,8 @@ class GroupService
         $group->users()->attach($user);
     }
     public function inviteUser(Group $group, User $user){
-         $group->invites()->sync($user,$group);
+         //return $group->invites()->attach(['user_id'=>$user->id,'group_id'=>$group->id]);
+        $group->invites()->syncWithoutDetaching($user);
     }
     public function deleteUser(Group $group, User $user){
         $group->users()->detach($user);
@@ -37,5 +39,14 @@ class GroupService
         $group->name = $name;
         $group->save();
     }
-
+    public function leaveGroup(Group $group, User $user){
+        $group->users()->detach($user);
+    }
+    public function changeOwner(Group $group, User $user){
+     $group->creator_id = $user->id;
+     $group->save();
+    }
+    public function cancelInvite(Group $group, User $user){
+        $group->invites()->detach($user);
+    }
 }

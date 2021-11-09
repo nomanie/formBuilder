@@ -15,7 +15,10 @@
                         Group:
                     </div>
                     <div class="col-sm-4">
-                        Action
+                        Join:
+                    </div>
+                    <div class="col-sm-4">
+                        Refuse:
                     </div>
                 </div>
                 @foreach($invitations as $inv)
@@ -27,6 +30,11 @@
                         <div class="col-sm-4">
                             {!! Form::open(['method'=>'POST','url'=>route('join.invite',['id'=>Auth::user()->id,'gid'=>$i->id])]) !!}
                             <button class="btn btn-dark">Join</button>
+                            {!! Form::close() !!}
+                        </div>
+                        <div class="col-sm-4">
+                            {!! Form::open(['method'=>'POST','url'=>route('refuse.invite',['id'=>Auth::user()->id,'gid'=>$i->id])]) !!}
+                            <button class="btn btn-warning">Refuse</button>
                             {!! Form::close() !!}
                         </div>
                     </div>

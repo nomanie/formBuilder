@@ -1,8 +1,24 @@
 interakcje usera:
-    tworzenie grupy
-    usuwanie grupy
-    edycja nazwy grupy
-    dodawanie userow do grupy
-    usuwanie userow z grupy
-    nadawanie roli userom w grupie!
-
+    Grupy:
+        tworzenie grupy
+        usuwanie grupy
+        edycja nazwy grupy
+        dodawanie userow do grupy
+        usuwanie userow z grupy
+        nadawanie roli userom w grupie
+        Opuszczanie grupy
+        zmiana wlascicela grupy
+    Zaproszenia:
+    wysyłanie zaproszen do grupy
+    przyjmowanie zaproszen do grupy
+    odrzucanie zaproszen do grupy
+    wyswietlanie wyslanych zaproszen
+    usuwanie wyslanych zaproszen
+Zabezpieczenia:
+    podgląd grupy!
+    usunięcie grupy!
+    usunięcie czlonka z grupy!
+    zmiana roli!
+    zmiana założyciela!
+    zmiana nazwy grupy!
+    zaproszenie do grupy!

@@ -22,18 +22,24 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//groups
 Route::get("/group/create",'App\Http\Controllers\Home\GroupController@createView')->name('create.group');
 Route::get("/group/show/{id}",'App\Http\Controllers\Home\GroupController@showAll')->name('group.show');
 Route::get("/group/show/{id}/{idd}",'App\Http\Controllers\Home\GroupController@showOne')->name('group.show.one');
 Route::post('/group/create','App\Http\Controllers\Home\GroupController@create')->name('group.create');
-Route::post('/invite/send','App\Http\Controllers\Home\InvitationController@store')->name('send.invite');
+Route::post('group/delete/{group_id}/{id}','App\Http\Controllers\Home\GroupController@deleteUser')->name('delete.user');
+Route::delete('group/delete/{group_id}/{id}','App\Http\Controllers\Home\GroupController@deleteGroup')->name('group.delete');
+Route::post('/group/{group_id}/edit','App\Http\Controllers\Home\GroupController@changeName')->name('change.name.group');
+Route::post('/group/{group_id}/edit/role/{user_id}','App\Http\Controllers\Home\GroupController@changeUserRole')->name('change.user.role');
+Route::delete('group/{id}/{group_id}/leave','App\Http\Controllers\Home\GroupController@leaveGroup')->name('group.leave');
+Route::post('/group/{group_id}/changeOwner','App\Http\Controllers\Home\GroupController@changeOwner')->name('change.group.owner');
+//invites
+Route::post('/{id}/invite/send','App\Http\Controllers\Home\InvitationController@store')->name('send.invite');
 Route::get('/invite/show/{id}','App\Http\Controllers\Home\InvitationController@show')->name('show.invite');
 Route::post('/invite/join/{id}/{gid}','App\Http\Controllers\Home\InvitationController@join')->name('join.invite');
-Route::post('group/show/delete/{group_id}/{id}','App\Http\Controllers\Home\GroupController@deleteUser')->name('delete.user');
-Route::delete('group/{id}/{group_id}/delete','App\Http\Controllers\Home\GroupController@deleteGroup')->name('group.delete');
-Route::post('/group/{group_id}/edit','App\Http\Controllers\Home\GroupController@changeName')->name('change.name.group');
-Route::post('/group/{group_id}/editname','App\Http\Controllers\Home\GroupController@changeUserRole')->name('change.user.role');
-
+Route::post('/invite/refuse/{id}/{gid}','App\Http\Controllers\Home\InvitationController@refuse')->name('refuse.invite');
+Route::get('/invite/show/send/{id}','App\Http\Controllers\Home\InvitationController@showSended')->name('show.sended.invite');
+Route::post('/invite/show/send/{id}/{gid}/delete','App\Http\Controllers\Home\InvitationController@cancel')->name('cancel.invite');
 Route::get('/logout',function(){
     Auth::logout();
     return view('auth/login');
