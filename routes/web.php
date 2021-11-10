@@ -44,6 +44,9 @@ Route::post('/invite/show/send/{id}/{gid}/delete','App\Http\Controllers\Home\Inv
 Route::get('/forms/{id}',function(){
     return view('home/pages/forms/show');
 })->name('show.forms');
+Route::get('/forms/one/{id}',function(){
+    return view('home/pages/forms/showOne');
+})->name('show.one.form');
 //logout
 Route::get('/logout',function(){
     Auth::logout();
