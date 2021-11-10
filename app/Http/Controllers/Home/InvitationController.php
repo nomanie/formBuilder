@@ -23,9 +23,13 @@ class InvitationController extends Controller
        ]);
        $group = Group::where('id',$input['group_id'])->first();
        $user = User::where('email',$input['email'])->first();
-       $sender =  User::where('id',$id)->first();
-       (new GroupService())->inviteUser($group,$user);
-       return back();
+       if($group->creator_id == Auth::user()->id){
+           (new GroupService())->inviteUser($group,$user);
+           return back();
+       }
+       else{
+           return "ERROR!";
+       }
    }
    public function show($id){
        $user = User::with('invites')->where("id",$id)->get();

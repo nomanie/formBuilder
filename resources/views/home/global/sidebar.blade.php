@@ -14,7 +14,7 @@
     <h3 class="mt-3 dropdown-h3  text-center" id="form">Forms</h3>
     <div class="form-dropdown-menu dropdown-div ml-4">
         <s>Create new Form</s><br>
-        <s>Your Forms</s>
+        <a href="{{route('show.forms',['id'=>Auth::user()->id])}}">Your Forms</a>
     </div>
     <h3 class="mt-3 dropdown-h3  text-center" id="inv">Invitations</h3>
     <div class="inv-dropdown-menu dropdown-div ml-4">

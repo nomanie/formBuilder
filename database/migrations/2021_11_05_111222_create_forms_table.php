@@ -15,7 +15,7 @@ class CreateFormsTable extends Migration
     {
         Schema::create('forms', function (Blueprint $table) {
             $table->integer('id');
-            $table->integer('group_id');
+            $table->foreignId('group_id')->constrained('groups')->onDelete('cascade')->onUpdate('cascade');
             $table->string('field_name');
             $table->string('type');
             $table->string('value');
