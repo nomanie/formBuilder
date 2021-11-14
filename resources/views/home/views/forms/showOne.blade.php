@@ -148,8 +148,8 @@
         $('.checkboxes').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" placeholder="Label for Checkbox" id="checkbox'+checkbox_number+'" class="form-control mtp-checkbox" ></div> </div>')
     }
     function editNextSelectOption(){
-        checkbox_number ++;
-        $('.selects').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" placeholder="Select Option" id="select'+checkbox_number+'" class="form-control mtp-select" ></div> </div>')
+        select_number ++;
+        $('.selects').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" placeholder="Select Option" id="select'+select_number+'" class="form-control mtp-select" ></div> </div>')
     }
     //end functions for dynamic buttons
     //add field function for add field button
@@ -172,15 +172,16 @@ $(".add-field").on('click',function(){
             }
         }
         else if(type == "Checkbox"){
-            $('.edit-field-properties .card-body').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('name',null,array('class'=>'form-control','placeholder'=>'Label for Checkbox','id'=>'name')) !!}</div> <hr> </div><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'required')) !!}{!! Form::label('required','Required') !!} </div></div> ')
+            checkbox_number = 1;
+            $('.edit-field-properties .card-body').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('name',null,array('class'=>'form-control mtp-checkbox','placeholder'=>'Label for Checkbox','id'=>'name')) !!}</div> <hr> </div><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'required')) !!}{!! Form::label('required','Required') !!} </div></div> ')
         }
         else if(type == "Multiple Checkbox"){
-            checkbox_number = 0;
+            checkbox_number = 1;
             $('.edit-field-properties .card-body').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('name',null,array('class'=>'form-control','placeholder'=>'Checkbox Name','id'=>'name')) !!}</div></div><hr><div class="row checkboxes"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'required')) !!}{!! Form::label('required','Required') !!} </div></div><div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('checkbox0',null,array('class'=>'form-control mtp-checkbox','id'=>'checkbox0','placeholder'=>'Label for Checkbox')) !!}</div> </div><button class="btn btn-secondary mt-3 add-next-checkbox" onclick="editNextCheckbox()">Add Next Checkbox</button> ')
         }
         else if(type == "Select"){
-            select_number = 0
-            $(".edit-field-properties .card-body").append('<div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('name',null,array('class'=>'form-control','placeholder'=>'Select Name','id'=>'name')) !!}</div></div><hr><div class="row selects"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'required')) !!}{!! Form::label('required','Required') !!} </div></div><div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('select0',null,array('class'=>'form-control','id'=>'select0','placeholder'=>'Select Option mtp-select')) !!}</div> </div><button class="btn btn-secondary mt-3 add-next-checkbox" onclick="editNextSelectOption()">Add Next Option</button> ')
+            select_number = 1
+            $(".edit-field-properties .card-body").append('<div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('name',null,array('class'=>'form-control','placeholder'=>'Select Name','id'=>'name')) !!}</div></div><hr><div class="row selects"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'required')) !!}{!! Form::label('required','Required') !!} </div></div><div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('select_label0',null,array('class'=>'form-control mtp-select','id'=>'select0','placeholder'=>'Select Option mtp-select')) !!}</div> </div><button class="btn btn-secondary mt-3 add-next-checkbox" onclick="editNextSelectOption()">Add Next Option</button> ')
         }
         else if(type == 'Date'){
             $(".edit-field-properties .card-body").append('<div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('name',null,array('class'=>'form-control','placeholder'=>'Name','id'=>'name')) !!}</div> <hr> </div> <div class="row">{!! Form::label('before','Not Before') !!} <div class="col-sm-8 mb-2">{!! Form::date('before',null,array('class'=>'form-control')) !!}</div></div><div class="row"><div class="col-sm-8">{!! Form::label('after','Not After') !!}{!! Form::date('after',null,array('class'=>'form-control')) !!} </div></div><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'required')) !!}{!! Form::label('required','Required') !!} </div></div> ')
@@ -209,9 +210,10 @@ $(".add-field").on('click',function(){
                 data[input_number]['special'] = $('input[id="special-char"]').prop('checked')
             }
         }
-        else if(a == "Checkbox"){
+        else if(a == "Checkbox" || a == "Multiple Checkbox"){
             $(".mtp-checkbox").each(function(i=0){
                 data[input_number]['checkbox_label'+i] = $(this).val();
+                data[input_number]['checkbox_number'] = checkbox_number
                 i++
                 options[input_number]++;
             })
@@ -219,6 +221,7 @@ $(".add-field").on('click',function(){
         else if(a == "Select"){
             $(".mtp-select").each(function(i=0){
                 data[input_number]['select_label'+i] = $(this).val();
+                data[input_number]['select_number'] = select_number
                 i++
                 options[input_number]++;
             })
@@ -280,8 +283,8 @@ function showOtherFields(index){
     $("#other-fields").toggle();
     var d = data[index];
     console.log(d)
+    console.log(options[index])
     for(i=0;i<options[index];i++){
-
         $("#other-fields .card .card-body").append('<div class="row"><div class="col-sm-4">Label'+i+': </div><div class="col-sm-4">'+d['checkbox_label'+i]+'</div></div>')
     }
 }
@@ -331,21 +334,26 @@ $(".clear-form").on('click',function(){
                 }
             }
             else if(type == "Checkbox"){
-                $('.edit-field-div .card-body').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" name="name" id="name" placeholder="Label for checkbox" class="form-control"></div> <hr> </div><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div> ')
+                $('.edit-field-div .card-body').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" name="name" id="edit-name" placeholder="Label for checkbox" class="form-control" value="'+data[index]['name']+'"></div> <hr> </div><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div> ')
             }
             else if(type == "Multiple Checkbox"){
-                checkbox_number = 0;
-                $('.edit-field-div .card-body').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" name="name" id="name" placeholder="Checkbox Name" class="form-control"></div></div></div><hr><div class="row checkboxes"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div><div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('checkbox0',null,array('class'=>'form-control mtp-checkbox','id'=>'checkbox0','placeholder'=>'Label for Checkbox')) !!}</div> </div><button class="btn btn-secondary mt-3 add-next-checkbox" onclick="editNextCheckbox()">Add Next Checkbox</button> ')
+                $('.edit-field-div .card-body').append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" name="name" id="edit-name" placeholder="Checkbox Name" class="form-control" value="'+data[index]['name']+'"></div></div></div><hr><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div><div class="row row-checkbox checkboxes"> <div class="col-sm-10 mt-2 mb-2"></div> </div><button class="btn btn-secondary mt-3 add-next-checkbox" onclick="editNextCheckbox()">Add Next Checkbox</button> ')
+                for(var i=0;i<data[index]['checkbox_number'];i++){
+                    $('.checkboxes').append('<div class="col-sm-10 mt-2 mb-2"><input type="text" class="form-control mtp-checkbox" id="edit-checkbox'+i+'" value="'+data[index]['checkbox_label'+i]+'"></div>')
+                }
             }
             else if(type == "Select"){
-                select_number = 0
-                $(".edit-field-div .card-body").append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" name="name" id="name" placeholder="Select Name" class="form-control"></div></div></div><hr><div class="row selects"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div><div class="row"> <div class="col-sm-10 mt-2 mb-2">{!! Form::text('select0',null,array('class'=>'form-control','id'=>'select0','placeholder'=>'Select Option mtp-select')) !!}</div> </div><button class="btn btn-secondary mt-3 add-next-checkbox" onclick="editNextSelectOption()">Add Next Option</button> ')
+                $(".edit-field-div .card-body").append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" name="name" id="edit-name" placeholder="Select Name" class="form-control" value="'+data[index]['name']+'"></div></div></div><hr><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div><div class="row row-select selects">  </div><button class="btn btn-secondary mt-3 add-next-checkbox" onclick="editNextSelectOption()">Add Next Option</button> ')
+                for(var i=0;i<data[index]['select_number'];i++){
+                    $('.selects').append('<div class="col-sm-10 mt-2 mb-2"><input type="text" class="form-control mtp-select" id="edit-select'+i+'" value="'+data[index]['select_label'+i]+'"></div>')
+                }
+
             }
             else if(type == 'Date'){
-                $(".edit-field-div .card-body").append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" name="name" id="name" placeholder="Name" class="form-control"></div></div> <hr> </div> <div class="row">{!! Form::label('before','Not Before') !!} <div class="col-sm-8 mb-2">{!! Form::date('before',null,array('class'=>'form-control','id'=>'edit-before')) !!}</div></div><div class="row"><div class="col-sm-8">{!! Form::label('after','Not After') !!}{!! Form::date('after',null,array('class'=>'form-control','id'=>'edit-after')) !!} </div></div><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div> ')
+                $(".edit-field-div .card-body").append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input value="'+data[index]['name']+'" type="text" name="name" id="name" placeholder="Name" class="form-control"></div></div> <hr> </div> <div class="row">{!! Form::label('before','Not Before') !!} <div class="col-sm-8 mb-2">{!! Form::date('before',null,array('class'=>'form-control','id'=>'edit-before')) !!}</div></div><div class="row"><div class="col-sm-8">{!! Form::label('after','Not After') !!}{!! Form::date('after',null,array('class'=>'form-control','id'=>'edit-after')) !!} </div></div><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div> ')
             }
             else if(type == "Time"){
-                $(".edit-field-div .card-body").append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input type="text" name="name" id="name" placeholder="Name" class="form-control"></div></div> <hr> </div> <div class="row">{!! Form::label('before','Not Before') !!} <div class="col-sm-8 mb-2"><input type="time" id="before" class="form-control" name="before"></div></div><div class="row"><div class="col-sm-8">{!! Form::label('after','Not After') !!}<input type="time" class="form-control" name="after" id="after"> </div></div><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div> ')
+                $(".edit-field-div .card-body").append('<div class="row"> <div class="col-sm-10 mt-2 mb-2"><input value="'+data[index]['name']+'" type="text" name="name" id="name" placeholder="Name" class="form-control"></div></div> <hr> </div> <div class="row">{!! Form::label('before','Not Before') !!} <div class="col-sm-8 mb-2"><input type="time" id="before" class="form-control" name="before"></div></div><div class="row"><div class="col-sm-8">{!! Form::label('after','Not After') !!}<input type="time" class="form-control" name="after" id="after"> </div></div><div class="row"> <div class="col-sm-12"> {!! Form::checkbox('required',0,false,array('id'=>'edit-required')) !!}{!! Form::label('required','Required') !!} </div></div> ')
             }
             $(".edit-field-div .card-body").append('<div class="row mt-2"><div class="col-sm-5"></div> <div class="col-sm-3">' +
                 '<button class="btn btn-success" onclick="saveEditField(data[index],index)">Save</button></div> <div class="col-sm-3"> <button class="btn btn-danger">Cancel</button> </div> </div>')
@@ -353,8 +361,25 @@ $(".clear-form").on('click',function(){
         }
     })
     function saveEditField(data,i){
-        console.log(data)
         all_td_ids = ['type','name','required','min','max','big','special','not-before','not-after']
+        options[i] = 0;
+        if(data['type'] == "Select"){
+            $('.edit-field-properties .card .card-body .selects').html("");
+                $(".edit-field-body .mtp-select").each(function(ii=0){
+                    data['select_label'+ii] = $(this).val();
+                    data['select_number'] = select_number
+                    ii++
+                    options[i]++;
+                })
+        }
+        else if(data['type'] == "Multiple Checkbox"){
+                $(".edit-field-body  .mtp-checkbox").each(function(ii=0){
+                    data['checkbox_label'+ii] = $(this).val();
+                    data['checkbox_number'] = checkbox_number
+                    ii++
+                    options[i]++;
+                })
+        }
         $('.edit-field-div').toggle();
         $('.selected').toggleClass();
         $(all_td_ids).each(function(id) {
@@ -372,28 +397,45 @@ $(".clear-form").on('click',function(){
     }
     // form view
     $(".view-form").on('click',function(){
-        $(".form-view").html("")
-        $('.form-view').toggle();
-        if($(".view-form").text() == "Hide Form")
-        $(".view-form").text("View Form")
-        else{
-            $(".view-form").text("Hide Form")
-        }
-       let rows_number = 0
-        $.each(data, function(o){
-            $(".form-view").append('<div class="section"></div>')
-                if(o %4 ==0 || o == 0){
-                    $('.form-view .section').append('<div class="row row'+rows_number+'"></div>')
-                    rows_number++;
-                    if(o==0){
-                        rows_number = 0;
-                    }
+            $(".form-view").html("")
+            $('.form-view').toggle();
+            if($(".view-form").text() == "Hide Form")
+                $(".view-form").text("View Form")
+            else{
+                $(".view-form").text("Hide Form")
+            }
+        $(".form-view").append('<div class="section"></div>')
+            let rows_number = 0
+            $.each(data, function(o){
+                if(data[o]['type'] === undefined){
+                    console.log("xx")
                 }
-            $('.form-view .section .row'+rows_number).append('<div class="col-sm-4"><label for='+data[o]["name"]+'>'+data[o]["name"]+'</label><input type="'+data[o]['type']+'" class="form-control"></div>')
+                else{
+                    if(data[o]['type'] == "Select"){
+                        $('.form-view .section').append('<div class="row"><div class="col-sm-4"><label for='+data[o]["name"]+'>'+data[o]["name"]+'</label><select class="form-control" id="'+data[o]['type']+o+'"></select></div></div>')
+                        for(i=0;i<data[o]['select_number'];i++){
+                            $('select#'+data[o]['type']+o).append("<option id='"+data[o]['select_label'+i]+"'>"+data[o]['select_label'+i]+"</option>")
+                        }
 
+                    }
+                    else{
+                        if(data[o]['type'] == "Checkbox")
+                            $('.form-view .section').append('<div class="row"><div class="col-sm-4"><label for='+data[o]["name"]+'>'+data[o]["name"]+'</label><input type="'+data[o]['type']+'"></div>')
+                        else if(data[o]['type'] == "Multiple Checkbox"){
+                            $('.form-view .section').append('<div class="row"><div class="col-sm-4">'+data[o]["name"]+'</div><div class="row"></div>')
+                            for(ii=0;ii<data[o]['checkbox_number'];ii++){
+                                $('.form-view .section').append('<input id="'+data[o]['name']+'" name="'+data[o]['name']+'" class="ml-2" type="checkbox" value="'+data[o]['checkbox_label'+ii]+'"><label for='+data[o]["checkbox_label"+ii]+'>'+data[o]["checkbox_label"+ii]+'</label>')
+                            }
 
-        })
+                        }
+                        else{
+                            $('.form-view .section').append('<div class="row"><div class="col-sm-4"><label for='+data[o]["name"]+'>'+data[o]["name"]+'</label><input type="'+data[o]['type']+'" class="form-control"></div>')
+                        }
+                    }
 
+                }
+
+            })
     })
 </script>
 <style>
