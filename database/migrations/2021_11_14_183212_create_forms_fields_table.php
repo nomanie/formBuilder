@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFormsTable extends Migration
+class CreateFormsFieldsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateFormsTable extends Migration
      */
     public function up()
     {
-        Schema::create('forms', function (Blueprint $table) {
+        Schema::create('forms_fields', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('group_id')->constrained('groups')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId("form_id")->constrained('forms')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('field_type_id')->constrained('fields_types')->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
+            $table->boolean("required");
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ class CreateFormsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('forms');
+        Schema::dropIfExists('forms_fields');
     }
 }
