@@ -9,6 +9,13 @@ class Field extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+       'form_id',
+        'field_type_id',
+        'name',
+        'required'
+    ];
+
     public function forms(){
         return $this->belongsTo('forms');
     }

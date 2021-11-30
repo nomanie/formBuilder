@@ -47,6 +47,7 @@ Route::get('/forms/{id}',function(){
 Route::get('/forms/one/{id}',function(){
     return view('home/pages/forms/showOne');
 })->name('show.one.form');
+Route::post("/forms/save",'App\Http\Controllers\Home\FormController@store')->name('form.store');
 //logout
 Route::get('/logout',function(){
     Auth::logout();

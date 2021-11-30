@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFormsFieldsTable extends Migration
+class CreateFieldsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFormsFieldsTable extends Migration
      */
     public function up()
     {
-        Schema::create('forms_fields', function (Blueprint $table) {
+        Schema::create('fields', function (Blueprint $table) {
             $table->id();
             $table->foreignId("form_id")->constrained('forms')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('field_type_id')->constrained('fields_types')->onDelete('cascade')->onUpdate('cascade');
@@ -30,6 +30,6 @@ class CreateFormsFieldsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('forms_fields');
+        Schema::dropIfExists('fields');
     }
 }

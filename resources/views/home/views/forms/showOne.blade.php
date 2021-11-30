@@ -2,7 +2,7 @@
     <div class="header">
         <div class="row">
             <div class="col-sm-2 form-name-create" style="z-index: 2;">
-                {!! Form::text('name',null,(['class'=>'form-control ml-5','placeholder'=>'Name'])) !!}
+                {!! Form::text('name',null,(['class'=>'form-control ml-5','placeholder'=>'Name','id'=>'form_name'])) !!}
             </div>
             <div class="col-sm-7" style="z-index: 2;">
                 <button class="btn btn-primary add-field">Add Field</button>
@@ -10,6 +10,7 @@
                 <button class="btn btn-light edit-field">Edit Field</button>
                 <button class="btn btn-primary view-form">View Form</button>
                 <button class="btn btn-warning make-form-private">Make form Private</button>
+                {!! Form::select('group',App\Models\Group::where('creator_id','=',Auth::user()->id)->pluck('name'),null,array('class'=>' btn btn-light','id'=>'save')) !!}
             </div>
             <div class="col-sm-3" style="z-index: 2;">
                 <button class="btn btn-success save">Save</button>
@@ -436,6 +437,17 @@ $(".clear-form").on('click',function(){
                 }
 
             })
+    })
+    $(".save").on('click',function(){
+       data['form'] = {
+            'group_id':$('#save option:selected').text(),
+           'name':$("#form_name").val(),
+            }
+        $.ajax({
+            data: data,
+            type: "POST",
+            url: "{{route('form.store')}}",
+        })
     })
 </script>
 <style>

@@ -9,6 +9,11 @@ class Form extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+      'group_id',
+      'name',
+    ];
+
     public function groups()
     {
         return $this->hasMany('groups');
